@@ -1,5 +1,6 @@
 <?php
 
+  //Client ID of the application.
   $clientID     = "your client id";
 
   //Client Secret key of the application.

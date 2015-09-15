@@ -14,7 +14,7 @@
         $authHeader = "Authorization: Bearer ". $accessToken;
 
         //Set the params.//
-        $fromLanguage = "";
+        $fromLanguage = "zh-CHS";
         $toLanguage   = "en";
         $contentType  = 'text/html';
         $category     = 'general';
@@ -33,8 +33,8 @@
 
         for ($i= 0; $i< $size; $i++) {
 
-            $inputStrTitleArr = array();
-            $inputStrContentArr = array();
+            $inputStrArr = array();
+
             $count = 0;
 
             $title = (String)$jsonObj[$i]->title;
@@ -58,9 +58,9 @@
             foreach($xmlObj->TranslateArrayResponse as $translatedArrObj){
 
                 if ($ii === 0) {
-                    $jsonObj[$i]->transtitle = (String)$translatedArrObj->TranslatedText;
+                    $jsonObj[$i]->trans_title = (String)$translatedArrObj->TranslatedText;
                 } else {
-                    $jsonObj[$i]->transcontent = (String)$translatedArrObj->TranslatedText;
+                    $jsonObj[$i]->trans_content = (String)$translatedArrObj->TranslatedText;
                 }
                 $ii++;
             }
