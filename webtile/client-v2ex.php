@@ -74,7 +74,7 @@
             $resObj->posts->{$i} = $itemObj;
         }
 
-        echo json_encode($resObj);
+        echo json_encode($resObj, JSON_PRETTY_PRINT);
 
     } catch (Exception $e) {
         echo "Exception: " . $e->getMessage() . PHP_EOL;
