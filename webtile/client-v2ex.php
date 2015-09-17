@@ -5,7 +5,6 @@
     include 'config.php';
 
     try {
-
         //Create the AccessTokenAuthentication object.
         $authObj      = new AccessTokenAuthentication();
         //Get the Access token.
@@ -29,13 +28,16 @@
         $rssResponse = $rssObj->curlRequest($rssUrl, NULL, NULL);
         $jsonObj = json_decode($rssResponse);
 
-        $size = count($jsonObj);
+        $resObj = new stdClass();
+        $resObj->posts = new stdClass();
 
-        for ($i= 0; $i< $size; $i++) {
+        $resObj->status = 'ok';
+
+        for ($i= 0; $i< min(5, count($jsonObj)); $i++) {
 
             $inputStrArr = array();
 
-            $count = 0;
+            $itemObj = new stdClass();
 
             $title = (String)$jsonObj[$i]->title;
             $content = (String)$jsonObj[$i]->content;
@@ -55,20 +57,26 @@
             $xmlObj = simplexml_load_string($curlResponse);
             $ii = 0;
 
+            $itemObj->id = $i;
+
+            $itemObj->trans_title = 'empty';
+            $itemObj->trans_content = 'empty';
+
             foreach($xmlObj->TranslateArrayResponse as $translatedArrObj){
 
                 if ($ii === 0) {
-                    $jsonObj[$i]->trans_title = (String)$translatedArrObj->TranslatedText;
+                    $itemObj->trans_title = (String)$translatedArrObj->TranslatedText;
                 } else {
-                    $jsonObj[$i]->trans_content = (String)$translatedArrObj->TranslatedText;
+                    $itemObj->trans_content = (String)$translatedArrObj->TranslatedText;
                 }
                 $ii++;
             }
-
+            $resObj->posts->{$i} = $itemObj;
         }
 
-        echo json_encode($jsonObj);
+        echo json_encode($resObj);
 
     } catch (Exception $e) {
         echo "Exception: " . $e->getMessage() . PHP_EOL;
+        die();
     }
