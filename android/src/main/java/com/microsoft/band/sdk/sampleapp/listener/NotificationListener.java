@@ -16,13 +16,11 @@ public class NotificationListener extends NotificationListenerService {
 
         Notification notification = null;
 
-        try {
-            getActiveNotifications();
 
+        getActiveNotifications();
+
+        if (sbn != null) {
             notification = sbn.getNotification();
-
-        } catch (Exception ex) {
-            Log.e("ERROR", "get notification error", ex);
         }
 
         if (notification != null && notification.tickerText != null) {
