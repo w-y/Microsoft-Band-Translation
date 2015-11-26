@@ -12,22 +12,25 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        super.onNotificationPosted(sbn);
+        try {
+            super.onNotificationPosted(sbn);
 
-        Notification notification = null;
+            Notification notification = null;
 
+            getActiveNotifications();
 
-        getActiveNotifications();
+            if (sbn != null) {
+                notification = sbn.getNotification();
+            }
 
-        if (sbn != null) {
-            notification = sbn.getNotification();
-        }
+            if (notification != null && notification.tickerText != null) {
 
-        if (notification != null && notification.tickerText != null) {
+                String strMsg = notification.tickerText.toString();
 
-            String strMsg = notification.tickerText.toString();
-
-            Client.getInstance(this.getApplicationContext()).translate(strMsg);
+                Client.getInstance(this.getApplicationContext()).translate(strMsg);
+            }
+        } catch(Exception e) {
+            Log.e("ERROR", "exception", e);
         }
     }
 
